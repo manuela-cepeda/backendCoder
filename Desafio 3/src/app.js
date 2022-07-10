@@ -32,16 +32,3 @@ app.get('/productoRandom',async (req,res)=>{
 
 
 
-
-
-
-
-// //query params
-// app.get('/info',(req,res)=>{
-//     // la ruta es /info?role=user&otro=dato
-//     //req.query es un objeto 
-//    let role = req.query.role;
-//    if(!role) return res.send('no se envio un rol')
-//    if(role!=='admin') return res.send('informacion confidencial, no puedo acceder aqui ')
-//    res.send(`bienvenido ${role} aqui tiene la info`)
-// })
