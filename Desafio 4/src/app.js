@@ -2,6 +2,7 @@ import express from "express";
 import productsRouter from "./routes/products.router.js";
 
 
+
 //inicializamos express
 const app = express();
 const PORT = 8080;
