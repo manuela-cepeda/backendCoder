@@ -1,0 +1,27 @@
+<%- include('./partials/head') %>
+<div class="p-3">
+    <h2 class="my-3"> Productos</h2>
+     <table class="table mb-3">
+        <thead>
+           <tr>
+           <th scope="col">Title</th>
+           <th scope="col">Price</th>
+           <th scope="col">Thumbnail</th>  
+        </tr>
+     </thead>
+     <tbody>
+        <% if(hasProducts) {  %>
+        <% products.forEach(product => {  %>
+         <tr>  
+            <td><%= product.title %></td>
+            <td><%= product.price %></td>
+            <td><img src="img/<%= product.thumbnail %>" /></td>
+        </tr>     
+        <%  }) %>
+        <%  } else{ %>
+            <h2 class="my-3"> No hay productos</h2>
+        <%  }  %>
+    </tbody>
+</table>
+<a href="http://localhost:8080"class="btn btn-primary">Crear nuevo producto </a>
+</div>

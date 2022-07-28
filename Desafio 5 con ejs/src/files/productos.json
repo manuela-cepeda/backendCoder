@@ -1,0 +1,20 @@
+[
+	{
+		"title": "escuadra",
+		"price": "30",
+		"thumbnail": "1659004892588-2824436_ruler_school_stationary_triangle_icon.png",
+		"id": 1
+	},
+	{
+		"title": "calculadora",
+		"price": "50",
+		"thumbnail": "1659004905338-2824440_calculator_math_school_tool_icon.png",
+		"id": 2
+	},
+	{
+		"title": "cuaderno",
+		"price": "30",
+		"thumbnail": "1659004918831-2824439_book_note_paper_school_icon (1).png",
+		"id": 3
+	}
+]
