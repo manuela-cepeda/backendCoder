@@ -39,10 +39,14 @@ formChat.addEventListener('submit',(e)=>addMessage(e))
 
 //renderizando mensajes
 const render = (data) => {
+    const date = new Date();
+    const now = date.toLocaleString();
     const html = data.map(elem => {
         return(`<div>
-        <strong>${elem?.author}</strong>:
-        <em>${elem?.text}</em> </div>`)
+        <strong  style="color:blue">${elem?.author}</strong>
+        <em  style="color:brown">[${now}]</em>: 
+        <em  style="color:green">${elem?.text}</em> 
+        </div>`)
     }).join(" ");
     document.getElementById('messages').innerHTML = html ;
 }
