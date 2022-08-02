@@ -1,0 +1,33 @@
+<div class="p-3">
+  <h2 class="my-3">Agregar Producto</h2>
+    <form id="productForm">
+       <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input id="title"name="title" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Prices</label>
+        <input id="price" name="price" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="thumbnail" class="form-label" >Thumbnail</label>
+        <input type="file" id="thumbnail" name="thumbnail" class="form-control" >
+      </div>
+      <input type="submit" class="btn btn-primary">      
+    </form>
+  <h2 class="my-3"> Productos</h2>
+   <table class="table mb-3">
+      <thead>
+         <tr>
+         <th scope="col">Title</th>
+         <th scope="col">Price</th>
+         <th scope="col">Thumbnail</th>  
+      </tr>
+   </thead>
+   <tbody id="products">
+
+   </tbody>    
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/products.js"></script> 
