@@ -1,27 +1,42 @@
 
-const socket = io();
 
 //leyendo formulario 
-let productForm = document.getElementById('productForm')
-
-const handleSubmit = (evt,form,route) =>{
-    evt.preventDefault()
-    let formData = new FormData(form);
+const handleSubmit = (e) =>{
+    e.preventDefault()
+    const title = document.getElementById('title');
+    const price = document.getElementById('price');
+    const newProduct = {
+        title: title.value,
+        price: price.value
+    }
     
-    fetch(route,{
-        method:"POST",
-        body:formData
+    if(title.value.trim().length>0 && price.value.trim().length>0){
+        const thumbnail = document.getElementById('thumbnail').files[0];
+        const readerImg = new FileReader();
+        readerImg.onloadend = function() {
+            socket.emit("new-product", {
+              data:readerImg.result, 
+              filename: thumbnail.name, 
+              title: newProduct.title,
+              price: newProduct.price        
+            });
+        }
+        readerImg.readAsDataURL(thumbnail);
        
-    }).then(res =>res.json()).then(json=>console.log(json)); 
+        title.value="";
+        price.value="";
+        document.getElementById('thumbnail').value=""
+    }
 
-    socket.emit('new-product' );
+   return false;
 }
-
-productForm.addEventListener('submit',(e)=>handleSubmit(e,e.target,'/api/products'))
+let productForm = document.getElementById('productForm')
+productForm.addEventListener('submit',(e)=>handleSubmit(e))
 
 
 //renderizando mensajes
-const render = (data) => {
+const renderProducts = (data) => {
+    console.log('render product')
     const html = data.map(product => {
         return(
         `<tr>   
@@ -33,6 +48,6 @@ const render = (data) => {
    
     document.getElementById('products').innerHTML = html ;
 }
-socket.on('products', (data) => { render(data) });
+socket.on('products', (data) => { renderProducts(data) });
 
 

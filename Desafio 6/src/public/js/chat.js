@@ -22,15 +22,16 @@ Swal.fire({
 const addMessage = (e) => {
     e.preventDefault()
     const chatbox = document.getElementById('texto');
+    const date = new Date();
      if(chatbox.value.trim().length>0){
          const mensaje = {
              author: user,
-             text: chatbox.value
+             text: chatbox.value,
+             time :  date.toLocaleString()
          };
          socket.emit('new-message', mensaje);
          chatbox.value="";
      }
-
     return false;
 }
 
@@ -38,19 +39,18 @@ const formChat = document.getElementById('formChat')
 formChat.addEventListener('submit',(e)=>addMessage(e))
 
 //renderizando mensajes
-const render = (data) => {
-    const date = new Date();
-    const now = date.toLocaleString();
+const renderChat = (data) => {
+    console.log('render char')
     const html = data.map(elem => {
-        return(`<div>
+        return(`<div class="bg-light" >
         <strong  style="color:blue">${elem?.author}</strong>
-        <em  style="color:brown">[${now}]</em>: 
+        <em  style="color:brown">[${elem?.time}]</em>: 
         <em  style="color:green">${elem?.text}</em> 
         </div>`)
     }).join(" ");
     document.getElementById('messages').innerHTML = html ;
 }
-socket.on('messages', (data) => { render(data) });
+socket.on('messages', (data) => { renderChat(data) });
 
 
 
