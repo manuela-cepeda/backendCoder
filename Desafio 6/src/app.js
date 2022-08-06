@@ -44,7 +44,8 @@ io.on('connection', socket=> {
 
     socket.on('new-message',async (data) => {
         await chatService.save(data)
-        io.emit('messages', messages);
+        const allMessages = await chatService.getAll();
+        io.emit('messages', allMessages);
     });
 
 
@@ -58,7 +59,8 @@ io.on('connection', socket=> {
       }
       fs.writeFileSync(file, new Buffer(newProduct.data.split(';base64,')[1], 'base64'))  
       await fileService.save(newProductWithImage)
-        io.emit('products', products);
+      let allProducts = await fileService.getAll();
+        io.emit('products', allProducts);
     });
     
 })
