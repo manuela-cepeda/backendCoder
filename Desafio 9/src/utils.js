@@ -14,5 +14,29 @@ const storage = multer.diskStorage({
     }
 })
 
+
+export const reemplaceId = (chats) => {
+    let lista = []
+    for (let i=1;i<chats.length;i++){
+      console.log(chats[i].author);
+      const copyAuthor = {
+        id: chats[i]._id.toString(),
+        email: chats[i].author.email,
+        name: chats[i].author.name,
+        lastName: chats[i].author.lastName,
+        age: chats[i].author.age,
+        alias: chats[i].author.alias,
+        avatar: chats[i].avatar
+      }
+      const aux = {
+        id: chats[i]._id.toString(),
+        author: copyAuthor,
+        text: chats[i].text
+      }
+    lista.push(aux)
+    }
+    return lista
+  }
+
 export const uploader = multer({storage})
 export default __dirname;
