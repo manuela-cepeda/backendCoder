@@ -22,14 +22,16 @@ router.post('/register', async (req, res) => {
 })
 
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     const { email, password} = req.body
     if(!email || !password) return res.status(400).send({status:"error", error:"incomplete values"})
     const user = await userService.getByEmail(email)
     if(!user) return res.status(400).send({status:"error", error:"the user doesn't exist"})
     if(user.password !== password) return res.status(400).send({status:"error", error:"the password isn't correct"})
-    req.session.user = email   
-    res.status(200).send({userName: user.name})   
+    req.session.user = email  
+      res.status(200).send({userName: user.name})
+
+
      
 })
 

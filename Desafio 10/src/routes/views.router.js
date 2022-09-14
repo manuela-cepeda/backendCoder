@@ -4,14 +4,14 @@ import User from "../dao/MongoDAO/User.js";
 const router = Router();
 const userService = new User()
 
+let user ; 
 
-
-router.get('/',  async (req, res)=>{   
+router.get('/current',  async (req, res)=>{   
     if (  req.session.user) { 
-        const {name} = await userService.getByEmail(req.session.user)
-        res.render('products', {name})
+        user = await userService.getByEmail(req.session.user)
+        res.render('products', {userName: user.name})
     }else{          
-        res.send('please log in')
+        res.redirect ('login')
     }
 })
 
@@ -23,8 +23,14 @@ router.get('/login',  (req, res)=>{
     res.render('login')
 })
 
-router.get('/logout',  (req, res)=>{   
-    res.render('logout')
+router.get('/logout',  (req, res)=>{  
+    
+    if(user) {
+        res.render('logout', {userName: user.name})
+    }
+    else{          
+        res.redirect ('login')
+    }
 })
 
 
