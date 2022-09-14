@@ -18,7 +18,8 @@ router.post('/register', async (req, res) => {
         password
         // password: createHash(password)
     }
-     const result = await userService.save(newUser)
+     await userService.save(newUser)
+     res.status(200).send({userName: name})
 })
 
 
