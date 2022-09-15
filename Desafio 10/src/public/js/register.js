@@ -11,7 +11,8 @@ const handleSubmit = async (e) =>{
         }
     })
     .then(result=> result.json())
-    if(response.userName) {
+    console.log(response)
+    if(response.success) {
       
             Swal.fire({
                 text:"Nuevo usuario registrado",

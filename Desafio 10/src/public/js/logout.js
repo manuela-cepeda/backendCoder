@@ -1,10 +1,12 @@
 
 let logout = document.getElementById('logout')
-logout?.addEventListener('click',(e)=>{
+logout?.addEventListener('click', async (e)=>{
     e.preventDefault()
-    const response  = fetch('api/sessions/logout')
+    const response  = await fetch('api/sessions/logout')
     .then(result=>result.json())
-    if (response)  location.assign('/logout');
+    console.log(response)
+    if(response.success) location.assign('/logout');
+
     
 })
 

@@ -14,7 +14,8 @@ loginForm.addEventListener('submit',async (e)=>{
         }
     })
     .then(result=> result.json())
-     if (response.userName)   location.assign('/current');
+    console.log(response)
+    if(response.success) location.assign('/current');
     
 })
 
