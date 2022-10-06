@@ -1,5 +1,5 @@
 import {fork} from 'child_process';
-import express from "express";
+import express, { response } from "express";
 
 const app = express();
 const PORT = 8080;
@@ -7,15 +7,26 @@ const server = app.listen(PORT, ()=>{
     console.log(`listening on port ${PORT}`);
 });
 
-app.use(express.json());
+let visitas = 0
 
+app.use(express.json());
+app.get('/', (req,res)=> {
+    res.send(`se ha visitado el sitio ${++visitas} veces`) 
+})
 app.get('/randoms',  (req, res)=>{   
     const cant =   req.query.cant || 100000000
     const child = fork('child.js')
-    child.send(cant)
     child.on('message', val => {
-        res.send(val)
+        if(val === 'listo'){
+            child.send(cant)
+            child.on('message', val => {
+                res.send(val)   
+            })
+        }else{
+            console.log( val)
+        }
     })
+   
 
 })
 

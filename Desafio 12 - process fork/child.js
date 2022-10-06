@@ -6,8 +6,7 @@ process.on( 'message', cant => {
    
 })
 
-
-
+process.send('listo')
 
 function random (cant) {
     const obj = {};
