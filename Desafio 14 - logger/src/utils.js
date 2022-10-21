@@ -22,7 +22,6 @@ const storage = multer.diskStorage({
 export const reemplaceId = (chats) => {
     let lista = []
     for (let i=1;i<chats.length;i++){
-      console.log(chats[i].author);
       const copyAuthor = {
         id: chats[i]._id.toString(),
         email: chats[i].author.email,

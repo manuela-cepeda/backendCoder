@@ -24,19 +24,7 @@ router.get('/logout',  (req, res)=>{
     res.render('logout', {user})
 })
 
-router.get('/info',  (req, res)=>{  
- 
-    const info = {
-        execPath: process.execPath,
-        argv: process.argv.slice(2),
-        cwd: process.cwd(),
-        pid: process.pid,
-        version: process.version,
-        platform: process.platform,
-        memoryUsage: process.memoryUsage().rss
-    }
-    res.render('info', {info})
-})
+
 
 
 

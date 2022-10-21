@@ -14,7 +14,9 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import initializePassport from "./config/passport.config.js";
 import passport from "passport";
+
 import config from './config/config.js'
+import logger from "./config/pino.config.js";
 
 
 //inicializamos express y websocket
@@ -23,6 +25,7 @@ const PORT = config.app.PORT;
 const server = app.listen(PORT, ()=>{
     console.log(`listening on port ${PORT}`);
 });
+
 
 app.use(express.json());
 app.use(express.static(__dirname+'/public'));
@@ -48,11 +51,16 @@ app.use('/', viewsRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/sessions', sessionsRouter);
 
+
 // template engine config
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine','handlebars');
 
+app.get('*', (req,res)=> {
+  logger.warn(`ruta inexistente: ${req.path} -- metodo: ${req.method}`)
+  res.send('ruta inexistente')
+})
 const io = new Server(server)
 const productsService = new Products()
 const chatService = new Chat()
@@ -62,38 +70,40 @@ let products = await productsService.getAll();
 let messages = await chatService.getAll();
 
 io.on('connection', socket=> { 
-
+  try{
     console.log('cliente conectado en socket' + socket.id)   
-     
-    socket.broadcast.emit('newUser')
-    socket.emit('messages',  messages );
-    socket.emit('products',  products );
-
-    socket.on('new-user',async (data) => {
-      const result = await usersService.save(data)
-      console.log(result)
-      io.emit('user', result);
-  });
-
-    socket.on('new-message',async (data) => {
-        await chatService.save(data)
-        let allMessages = await  chatService.getAllPopulate();
-        io.emit('messages', allMessages);
+       
+      socket.broadcast.emit('newUser')
+      socket.emit('messages',  messages );
+      socket.emit('products',  products );
+  
+      socket.on('new-user',async (data) => {
+        const result = await usersService.save(data)
+        io.emit('user', result);
     });
-
-
-    socket.on('new-product', async (newProduct) => {
-      const FileName = `${Date.now()}-${newProduct.filename}`;
-      const file = __dirname + `/public/img/${FileName}`;
-      let newProductWithImage = {
-        title: newProduct.title, 
-        price: newProduct.price, 
-        thumbnail: `${FileName}`
-      }
-      fs.writeFileSync(file, new Buffer(newProduct.data.split(';base64,')[1], 'base64'))  
-      await  productsService.save(newProductWithImage)
-      let allProducts =  await  productsService.getAll();
-        io.emit('products', allProducts);
-    });
+  
+      socket.on('new-message',async (data) => {
+          await chatService.save(data)
+          let allMessages = await  chatService.getAllPopulate();
+          io.emit('messages', allMessages);
+      });
+  
+  
+      socket.on('new-product', async (newProduct) => {
+        const FileName = `${Date.now()}-${newProduct.filename}`;
+        const file = __dirname + `/public/img/${FileName}`;
+        let newProductWithImage = {
+          title: newProduct.title, 
+          price: newProduct.price, 
+          thumbnail: `${FileName}`
+        }
+        fs.writeFileSync(file, new Buffer(newProduct.data.split(';base64,')[1], 'base64'))  
+        await  productsService.save(newProductWithImage)
+        let allProducts =  await  productsService.getAll();
+          io.emit('products', allProducts);
+      });
+  }catch (err) {
+    logger.error(` ${err.message}`); 
+  }
     
 })
